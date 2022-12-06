@@ -39,9 +39,20 @@ app.get("/", (req, res) => {
   Response.success(res, "Welcome to the menu-api application.");
 });
 
+app.use(function (req, res, next) {
+  res.header(
+    "Access-Control-Allow-Headers",
+    "x-access-token, Origin, Content-Type, Accept"
+  );
+  next();
+});
+
 // routes
-import { authRoutes } from "./app/routes";
-authRoutes(app);
+
+import { routes } from "./app/routes";
+routes.forEach((route) => {
+  route(app);
+});
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

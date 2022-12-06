@@ -15,6 +15,7 @@ const User = model(
     },
     {
       timestamps: true,
+      versionKey: false,
     }
   )
 );
