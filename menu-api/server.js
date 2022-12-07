@@ -1,4 +1,5 @@
 import express, { json, urlencoded } from "express";
+import fileUpload from "express-fileupload";
 import mongoose from "mongoose";
 import cors from "cors";
 import { DB_HOST, DB_PORT, DB_NAME } from "./app/config/db.config";
@@ -7,6 +8,9 @@ import { register } from "./app/controllers/auth.controller";
 
 import { Response } from "./app/helpers";
 
+import path from "path";
+const __dirname = path.resolve(path.dirname(""));
+
 const app = express();
 
 var corsOptions = {
@@ -14,6 +18,7 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(fileUpload());
 
 // parse requests of content-type - application/json
 app.use(json());
@@ -48,11 +53,13 @@ app.use(function (req, res, next) {
 });
 
 // routes
-
 import { routes } from "./app/routes";
 routes.forEach((route) => {
   route(app);
 });
+
+// static files
+app.use(express.static(__dirname + "/app/public"));
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
